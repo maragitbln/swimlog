@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>Seepferdchen Schwimm-Tagebuch 🐠</title>
+  <style>
+    body {
+      font-family: 'Comic Sans MS', sans-serif;
+      background: linear-gradient(to bottom, #a8e6ff, #ffffff);
+      text-align: center;
+      padding: 20px;
+    }
+    h1 { color: #0077b6; }
+    .day-nav { margin: 20px 0; font-size: 1.2em; }
+    .category {
+      margin: 10px auto;
+      max-width: 300px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #e0f7fa;
+      border-radius: 12px;
+      padding: 8px 12px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    .label { font-weight: bold; color: #005f73; }
+    .faces button {
+      font-size: 1.5em;
+      border: none;
+      background: none;
+      cursor: pointer;
+      transition: transform 0.1s;
+    }
+    .faces button.selected { transform: scale(1.2); }
+    #super {
+      display: none;
+      font-size: 2em;
+      color: #ff007f;
+      margin-top: 20px;
+      animation: pulse 1s infinite;
+    }
+    @keyframes pulse {
+      0% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.1); opacity: 0.8; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+    canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; }
+    img.badge {
+      width: 100px; 
+      margin-top: 15px;
+      transition: transform 0.3s;
+    }
+    img.badge.unlocked { transform: rotate(10deg) scale(1.1); }
+  </style>
+</head>
+<body>
+  <h1>Seepferdchen Schwimm-Tagebuch 🐠</h1>
+  <div class="day-nav">
+    <button id="prevDay">⬅️</button>
+    <span id="dateDisplay"></span>
+    <button id="nextDay">➡️</button>
+  </div>
+
+  <div id="categories"></div>
+  <div id="super">🎉 Super! 🎉</div>
+  <img id="badge" class="badge" src="https://upload.wikimedia.org/wikipedia/commons/7/7d/Seepferdchen-Abzeichen_2020.png" alt="Seepferdchen Badge" />
+
+  <canvas id="confetti"></canvas>
+
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+  <script>
+    const categories = ["Beine", "Arme", "Tauchen", "Springen"];
+    const faces = ["😞", "😐", "😀"];
+    const today = new Date();
+    let currentDate = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+
+    const categoriesDiv = document.getElementById("categories");
+    const dateDisplay = document.getElementById("dateDisplay");
+    const superText = document.getElementById("super");
+    const badge = document.getElementById("badge");
+    const confettiCanvas = document.getElementById("confetti");
+    const confetti = window.confetti.create(confettiCanvas, { resize: true });
+
+    function formatDate(d) {
+      return d.toISOString().split("T")[0];
+    }
+
+    function loadData() {
+      return JSON.parse(localStorage.getItem("swimData") || "{}");
+    }
+
+    function saveData(data) {
+      localStorage.setItem("swimData", JSON.stringify(data));
+    }
+
+    function render() {
+      const data = loadData();
+      const key = formatDate(currentDate);
+      const dayData = data[key] || {};
+      dateDisplay.textContent = currentDate.toLocaleDateString("de-DE", { weekday: 'short', day: 'numeric', month: 'short' });
+
+      categoriesDiv.innerHTML = "";
+      categories.forEach(cat => {
+        const div = document.createElement("div");
+        div.className = "category";
+        const label = document.createElement("div");
+        label.className = "label";
+        label.textContent = cat;
+        const facesDiv = document.createElement("div");
+        facesDiv.className = "faces";
+        faces.forEach((f, i) => {
+          const btn = document.createElement("button");
+          btn.textContent = f;
+          if (dayData[cat] === i) btn.classList.add("selected");
+          btn.onclick = () => {
+            dayData[cat] = i;
+            data[key] = dayData;
+            saveData(data);
+            render();
+          };
+          facesDiv.appendChild(btn);
+        });
+        div.appendChild(label);
+        div.appendChild(facesDiv);
+        categoriesDiv.appendChild(div);
+      });
+
+      const allHappy = categories.every(cat => dayData[cat] === 2);
+      if (allHappy) {
+        superText.style.display = "block";
+        badge.classList.add("unlocked");
+        confetti({ particleCount: 120, spread: 80, origin: { y: 0.6 } });
+      } else {
+        superText.style.display = "none";
+        badge.classList.remove("unlocked");
+      }
+    }
+
+    document.getElementById("prevDay").onclick = () => {
+      currentDate.setDate(currentDate.getDate() - 1);
+      render();
+    };
+    document.getElementById("nextDay").onclick = () => {
+      currentDate.setDate(currentDate.getDate() + 1);
+      render();
+    };
+
+    render();
+  </script>
+</body>
+</html>
