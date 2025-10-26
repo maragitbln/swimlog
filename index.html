@@ -6,22 +6,33 @@
   <meta name="robots" content="noindex, nofollow" />
   <title>Seepferdchen Schwimm-Tagebuch 🐠</title>
 
-  <!-- Fun kid-friendly font -->
+  <!-- Kid-friendly font -->
   <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap" rel="stylesheet">
 
   <style>
+    /* 🌊 Animated water background */
+    @keyframes waterWave {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
     body {
       font-family: 'Fredoka One', sans-serif;
-      background: linear-gradient(to bottom, #a8e6ff, #ffffff);
+      background: linear-gradient(135deg, #a8e6ff, #ffffff, #b2f7ef, #a8e6ff);
+      background-size: 400% 400%;
+      animation: waterWave 20s ease-in-out infinite;
       text-align: center;
       padding: 20px;
       overflow-x: hidden;
     }
+
     h1 {
       color: #0077b6;
       position: relative;
       user-select: none;
     }
+
     /* Hidden reset button - click the fish in the title */
     #resetZone {
       position: absolute;
@@ -37,21 +48,24 @@
       margin: 20px 0;
       font-size: 1.2em;
     }
+
     .category {
       margin: 10px auto;
       max-width: 320px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      background: #e0f7fa;
+      background: rgba(224, 247, 250, 0.85);
       border-radius: 12px;
       padding: 8px 12px;
       box-shadow: 0 2px 5px rgba(0,0,0,0.1);
     }
+
     .label {
       font-weight: bold;
       color: #005f73;
     }
+
     .faces button {
       font-size: 1.5em;
       border: none;
@@ -61,11 +75,13 @@
       filter: grayscale(1);
       opacity: 0.5;
     }
+
     .faces button.selected {
       transform: scale(1.2);
       filter: none;
       opacity: 1;
     }
+
     #super {
       display: none;
       font-size: 2em;
@@ -73,22 +89,26 @@
       margin-top: 20px;
       animation: pulse 1s infinite;
     }
+
     @keyframes pulse {
       0% { transform: scale(1); opacity: 1; }
       50% { transform: scale(1.1); opacity: 0.8; }
       100% { transform: scale(1); opacity: 1; }
     }
+
     canvas {
       position: fixed;
       top: 0; left: 0;
       width: 100%; height: 100%;
       pointer-events: none;
     }
+
     img.badge {
       width: 100px;
       margin-top: 15px;
       transition: transform 0.3s;
     }
+
     img.badge.unlocked {
       transform: rotate(10deg) scale(1.1);
     }
@@ -104,6 +124,7 @@
       overflow: hidden;
       box-shadow: inset 0 0 4px rgba(0,0,0,0.2);
     }
+
     .progress-bar {
       height: 100%;
       background-color: #00b4d8;
@@ -116,19 +137,21 @@
       position: absolute;
       width: 80px;
       opacity: 0.9;
-      animation: swimRight linear infinite;
       pointer-events: none;
     }
+
     @keyframes swimRight {
       0% { transform: translateX(-120px); }
       100% { transform: translateX(110vw); }
     }
+
     @keyframes swimLeft {
       0% { transform: translateX(110vw) scaleX(-1); }
       100% { transform: translateX(-120px) scaleX(-1); }
     }
   </style>
 </head>
+
 <body>
   <h1>Seepferdchen Schwimm-Tagebuch 
     <span id="resetZone">🐠</span>
