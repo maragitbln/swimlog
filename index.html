@@ -132,7 +132,7 @@
       transition: width 0.5s ease;
     }
 
-    /* Swimming fish */
+    /* Fish animation */
     .fish {
       position: absolute;
       width: 80px;
@@ -141,13 +141,15 @@
     }
 
     @keyframes swimRight {
-      0% { transform: translateX(-120px); }
-      100% { transform: translateX(110vw); }
+      0% { transform: translateX(-120px) translateY(0); }
+      50% { transform: translateX(55vw) translateY(-15px); }
+      100% { transform: translateX(110vw) translateY(0); }
     }
 
     @keyframes swimLeft {
-      0% { transform: translateX(110vw) scaleX(-1); }
-      100% { transform: translateX(-120px) scaleX(-1); }
+      0% { transform: translateX(110vw) translateY(0); }
+      50% { transform: translateX(55vw) translateY(15px); }
+      100% { transform: translateX(-120px) translateY(0); }
     }
   </style>
 </head>
@@ -288,22 +290,28 @@
       }
     };
 
-    // Fish animation
-    const fishImages = ['fish1.png', 'fish2.png', 'fish3.png'];
-    for (let i = 0; i < 6; i++) {
+    // Fish animation setup
+    const fishLeft = ['fish1l.png', 'fish2l.png', 'fish3l.png'];
+    const fishRight = ['fish1r.png', 'fish2r.png', 'fish3r.png'];
+    const allFish = fishLeft.concat(fishRight);
+
+    for (let i = 0; i < 8; i++) {
       const fish = document.createElement('img');
-      const imgName = fishImages[Math.floor(Math.random() * fishImages.length)];
+      const imgName = allFish[Math.floor(Math.random() * allFish.length)];
       fish.src = imgName;
       fish.className = 'fish';
-      fish.style.top = Math.random() * 80 + '%';
-      fish.style.animationDuration = (10 + Math.random() * 20) + 's';
-      fish.style.animationDelay = (-Math.random() * 20) + 's';
 
-      // fish1 & fish3 = face left → swim right→left
-      if (imgName.includes('1') || imgName.includes('3')) {
+      const topPos = Math.random() * 80;
+      fish.style.top = topPos + '%';
+      fish.style.animationDuration = (12 + Math.random() * 15) + 's';
+      fish.style.animationDelay = (-Math.random() * 15) + 's';
+
+      // Left vs right motion
+      if (imgName.endsWith('l.png')) {
         fish.style.left = '110vw';
         fish.style.animationName = 'swimLeft';
       } else {
+        fish.style.left = '-120px';
         fish.style.animationName = 'swimRight';
       }
 
