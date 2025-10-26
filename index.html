@@ -116,12 +116,16 @@
       position: absolute;
       width: 80px;
       opacity: 0.9;
-      animation: swim linear infinite;
+      animation: swimRight linear infinite;
       pointer-events: none;
     }
-    @keyframes swim {
+    @keyframes swimRight {
       0% { transform: translateX(-120px); }
       100% { transform: translateX(110vw); }
+    }
+    @keyframes swimLeft {
+      0% { transform: translateX(110vw) scaleX(-1); }
+      100% { transform: translateX(-120px) scaleX(-1); }
     }
   </style>
 </head>
@@ -162,6 +166,7 @@
     const confetti = window.confetti.create(confettiCanvas, { resize: true });
 
     const yaySound = new Audio('yay.mp3');
+    const popSound = new Audio('pop.mp3');
 
     function formatDate(d) {
       return d.toISOString().split("T")[0];
@@ -189,7 +194,6 @@
       const dayData = data[key] || {};
       dateDisplay.textContent = currentDate.toLocaleDateString("de-DE", { weekday: 'short', day: 'numeric', month: 'short' });
 
-      // Categories
       categoriesDiv.innerHTML = "";
       categories.forEach(cat => {
         const div = document.createElement("div");
@@ -207,6 +211,8 @@
             dayData[cat] = i;
             data[key] = dayData;
             saveData(data);
+            popSound.currentTime = 0;
+            popSound.play();
             render();
           };
           facesDiv.appendChild(btn);
@@ -222,6 +228,7 @@
         superText.style.display = "block";
         badge.classList.add("unlocked");
         confetti({ particleCount: 120, spread: 80, origin: { y: 0.6 } });
+        yaySound.currentTime = 0;
         yaySound.play();
       } else {
         superText.style.display = "none";
@@ -269,25 +276,16 @@
       fish.style.animationDuration = (10 + Math.random() * 20) + 's';
       fish.style.animationDelay = (-Math.random() * 20) + 's';
 
-      // Direction control based on filename
-      if (imgName.includes('2')) {
+      // fish1 & fish3 = face left → swim right→left
+      if (imgName.includes('1') || imgName.includes('3')) {
         fish.style.left = '110vw';
-        fish.style.transform = 'scaleX(-1)';
         fish.style.animationName = 'swimLeft';
+      } else {
+        fish.style.animationName = 'swimRight';
       }
 
       document.body.appendChild(fish);
     }
-
-    // Reverse animation for right-to-left swimmers
-    const style = document.createElement('style');
-    style.textContent = `
-      @keyframes swimLeft {
-        0% { transform: translateX(110vw) scaleX(-1); }
-        100% { transform: translateX(-120px) scaleX(-1); }
-      }
-    `;
-    document.head.appendChild(style);
 
     render();
   </script>
