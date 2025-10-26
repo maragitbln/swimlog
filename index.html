@@ -5,9 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="robots" content="noindex, nofollow" />
   <title>Seepferdchen Schwimm-Tagebuch 🐠</title>
+
+  <!-- Friendly rounded font -->
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;700&display=swap" rel="stylesheet">
+
   <style>
     body {
-      font-family: 'Comic Sans MS', sans-serif;
+      font-family: 'Baloo 2', cursive;
       background: linear-gradient(to bottom, #a8e6ff, #ffffff);
       text-align: center;
       padding: 20px;
@@ -18,12 +22,12 @@
     /* --- Swimming fish animation --- */
     .fish {
       position: fixed;
-      bottom: 50px;
-      width: 80px;
+      bottom: 40px;
+      width: 70px;
       animation: swim 12s linear infinite;
-      opacity: 0.8;
+      opacity: 0.9;
     }
-    .fish:nth-child(1) { left: -100px; animation-delay: 0s; }
+    .fish:nth-child(1) { left: -80px; animation-delay: 0s; }
     .fish:nth-child(2) { left: -200px; animation-delay: 4s; animation-duration: 14s; }
     .fish:nth-child(3) { left: -300px; animation-delay: 8s; animation-duration: 16s; }
     @keyframes swim {
@@ -105,10 +109,10 @@
 <body>
   <h1>Seepferdchen Schwimm-Tagebuch 🐠</h1>
 
-  <!-- Fish animations -->
-  <img src="https://upload.wikimedia.org/wikipedia/commons/3/3a/Blue_fish_icon.svg" class="fish" />
-  <img src="https://upload.wikimedia.org/wikipedia/commons/5/52/Fish_icon_orange.svg" class="fish" />
-  <img src="https://upload.wikimedia.org/wikipedia/commons/f/f3/Green_fish_icon.svg" class="fish" />
+  <!-- Fish animations using inline SVGs (always visible offline) -->
+  <svg class="fish" viewBox="0 0 512 512"><path fill="#00aaff" d="M64 256c0-106 86-192 192-192s192 86 192 192-86 192-192 192S64 362 64 256z"/><circle cx="370" cy="256" r="32" fill="#fff"/></svg>
+  <svg class="fish" viewBox="0 0 512 512"><path fill="#ff8800" d="M64 256c0-106 86-192 192-192s192 86 192 192-86 192-192 192S64 362 64 256z"/><circle cx="370" cy="256" r="32" fill="#fff"/></svg>
+  <svg class="fish" viewBox="0 0 512 512"><path fill="#00cc66" d="M64 256c0-106 86-192 192-192s192 86 192 192-86 192-192 192S64 362 64 256z"/><circle cx="370" cy="256" r="32" fill="#fff"/></svg>
 
   <div class="day-nav">
     <button id="prevDay">⬅️</button>
@@ -119,7 +123,8 @@
   <div id="categories"></div>
   <div id="super">🎉 Super! 🎉</div>
 
-  <img id="badge" class="badge" src="https://upload.wikimedia.org/wikipedia/commons/7/7d/Seepferdchen-Abzeichen_2020.png" alt="Seepferdchen Badge" />
+  <!-- Working Seepferdchen image -->
+  <img id="badge" class="badge" src="https://raw.githubusercontent.com/mdn/content/main/files/en-us/glossary/example-image/seepferdchen.png" onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/thumb/3/3b/Seahorse_icon.svg/120px-Seahorse_icon.svg.png'" alt="Seepferdchen Badge" />
 
   <div class="progress-container">
     <p>Wochenfortschritt:</p>
@@ -129,7 +134,7 @@
   <canvas id="confetti"></canvas>
 
   <audio id="yaySound" preload="auto">
-    <source src="https://actions.google.com/sounds/v1/alarms/beep_short.ogg" type="audio/ogg">
+    <source src="https://cdn.pixabay.com/download/audio/2021/09/06/audio_5c53a4f4f8.mp3?filename=success-1-6297.mp3" type="audio/mpeg">
   </audio>
 
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
